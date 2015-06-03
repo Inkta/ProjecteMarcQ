@@ -1,0 +1,80 @@
+<!doctype html>
+<html lang="ca">
+
+<head>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta charset="UTF-8">
+    <title>MoneyHunter</title>
+    <link rel="icon" type="image/png" href="images/gallHead.png" />
+    <link rel="stylesheet" href="css/bootstrap.min.css" type="text/css" />
+    <link rel="stylesheet" href="css/style.css" type="text/css" />
+    <script type="text/javascript" src="js/jquery.min.js"></script>
+    <link href="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/css/select2.min.css" rel="stylesheet" />
+    <script src="//cdnjs.cloudflare.com/ajax/libs/select2/4.0.0/js/select2.min.js"></script>
+    <script src="https://maps.googleapis.com/maps/api/js"></script>
+
+
+</head>
+
+<body ng-app='app' ng-controller="ApplicationController">
+    <div class="logoImg">
+        <img src="images/gallina.png" width="50" height="50" />
+    </div>
+    <nav class="navbar navbar-default">
+        <div class="container-fluid">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#bs-example-navbar-collapse-1">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <div id="logo">
+                    <a class="navbar-brand" href="/">MoneyHunter</a>
+                </div>
+            </div>
+
+            <div class="collapse navbar-collapse" id="bs-example-navbar-collapse-1">
+
+                <ul ng-if="!currentUser" class="nav navbar-nav navbar-right" class="butons">
+                    <li class="selectdos">
+                        <select2></select2>
+                    </li>
+                    <li><a onclick="tanca()" ng-if="!currentUser" href="/#/registre">Registre</a>
+                    </li>
+                    <li><a onclick="tanca()" ng-if="!currentUser" href="/#/login">Login</a>
+                    </li>
+                </ul>
+
+                <ul ng-if="currentUser" class="nav navbar-nav navbar-right" class="butons">
+                    <li class="selectdos">
+                        <select2></select2>
+                    </li>
+                    <li><a onclick="tanca()" ng-click="infoUser(currentUser.username)" href="/#/usuari">Perfil</a>
+                        <li><a onclick="tanca()" ng-click="" href="/#/tripulacio">Tripulacio</a>
+                            <li><a onclick="tanca()" ng-click="logout()" href="/#/">Sortir</a>
+                            </li>
+                </ul>
+            </div>
+        </div>
+    </nav>
+
+    <div ng-view></div>
+
+    <script type="text/javascript">
+        function tanca() {
+            $('.navbar-toggle').click();
+        }
+    </script>
+
+    <script type="text/javascript" src="js/bootstrap.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular.min.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular-route.js"></script>
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.3.11/angular-resource.js"></script>
+    <script src="js/angular-cookies.js"></script>
+    <script src="js/angular-file-upload.min.js"></script>
+    <script src="app.js"></script>
+
+</body>
+
+</html>

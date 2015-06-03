@@ -1,0 +1,60 @@
+<div class="container">
+    <div id="caixadelmapa" style="margin: auto;height: 100%;width: 100%;">
+    <div id="tresorCreat" class="alert alert-success" role="alert" style="display:none;">
+        <h3 style="color:black;"> Tresor Creat! </h3>
+    </div>
+        <div>
+            <button id="creatresor" style="width:100%;"class="btn-large btn-success">Afegeix un tresor aqui!</button>
+        </div>
+        <mapa></mapa>
+    </div>
+    
+    
+
+    <div id="afegeixtresor" style="display:none;">
+        <form>
+            <div class="form-group">
+                <label for="Descripcio">Descripcio del tresor!</label>
+                <input id="descripcioTresor" type="text" name="Descripcio" ng-model="descripcio" class="form-control" placeholder="Introdueix la descripcio!">
+            </div>
+            <button id="enviatresor" ng-click="afegirTresor()" type="submit" class="btn btn-success">Guarda</button>
+            <button id="cancelatresor" class="btn btn-default">Cancela</button>
+        </form>
+    </div>
+
+
+
+
+
+    <div ng-if="tresor" id="capturatresor">
+        <form>
+            <div class="form-group">
+                <h3 style="color:black;">{{tresor.descripcio}}</h3>
+            </div>
+            <button id="enviatresor" ng-click="RecollirTresor(tresor._id)" type="submit" class="btn btn-success">Captura!</button>
+            <button id="deixatresor" ng-click="RecollirTresor(null)" class="btn btn-default">Deixa..</button>
+        </form>
+    </div>
+</div>
+<script>
+    $("#creatresor").click(function() {
+        $('#afegeixtresor').removeAttr('style');
+        $('#afegeixtresor').attr('id', 'tresorafegit');
+    });
+
+    $("#enviatresor").click(function() {
+        $('#tresorafegit').attr('style', 'display:none;');
+        $('#tresorafegit').attr('id', 'afegeixtresor');
+        $('#descripcioTresor').val('');
+        $('#tresorCreat').show(1000, function() {
+            $(this).hide(2000);
+        });
+    });
+    
+    
+    $('#cancelatresor').click(function() {
+        $('#tresorafegit').attr('style', 'display:none;');
+        $('#tresorafegit').attr('id', 'afegeixtresor');
+        $('#descripcioTresor').val('');
+    });
+</script>

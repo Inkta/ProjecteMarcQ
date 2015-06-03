@@ -1,0 +1,56 @@
+<div class="container">
+    <div class="caixa" style="flex">
+        <div class="part part-visibleUser2">
+            <div class="caixaUser" ng-if="!tripulacio">
+                <h3 style="color:black;">Crea la teva tripulacio</h3>
+                <form class="loginform" ng-submit="creaTrip(nom)">
+                    <div class="form-group">
+                        <label for="usuari">Nom de la tripulacio!</label>
+                        <input type="text" class="form-control" ng-model="nom" id="nom">
+                    </div>
+                    <div ng-if="error" class="alert alert-danger">
+                        <strong>{{error}}</strong>
+                    </div>
+                    <input type="submit" class="btn btn-success btn-lg btn-block" value="Crea!">
+                </form>
+            </div>
+            <div class="caixaUser" ng-if="tripulacio">
+                <h3 style="color:black;">{{tripulacio.nom}}</h3>
+                <span>{{tripulacio.puntuacio}}</span><span> <img src="images/treasure.png" width="30" height="30"/></span>
+                <table class="table table-condensed" ng-if="tripulacio.membres.length > 0" style="margin-top:30px;">
+                <tr class="info">
+                    <td><b>Mariner</b>
+                    </td>
+                    <td><b>Punts</b>
+                    </td>
+                </tr>
+                <tr class="active" ng-repeat="membre in tripulacio.membres">
+                    <td>{{membre.username}}</td>
+                    <td>{{membre.puntuacio}}</td>
+                </tr>
+                </table>
+
+            </div>
+        </div>
+        <div class="part"></div>
+        <div class="part part-visibleUser" ng-if="tripulacio">
+            <div class="caixaUser">
+                <h3 style="color:black;">Recluta un mariner!</h3>
+                <form class="loginform" ng-submit="reclutar(mariner)">
+                    <div class="form-group">
+                        <label for="usuari">Nom del Mariner</label>
+                        <input type="text" class="form-control" ng-model="mariner" id="mariner">
+                    </div>
+                    <div ng-if="solerror" class="alert alert-danger">
+                        <strong>{{solerror}}</strong>
+                    </div>
+                    <input type="submit" class="btn btn-success btn-lg btn-block" value="Envia">
+                </form>
+            </div>
+
+        </div>
+    </div>
+
+
+
+</div>

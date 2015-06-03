@@ -1,0 +1,61 @@
+<div class="container">
+    <div class="caixa" style="flex">
+        <div class="part part-visibleUser2">
+            <div class="caixaUser">
+
+
+
+                <div class="solicitudsUser" ng-if="usuari.username == currentUser.username">
+                    <button class="btn btn-default" ng-repeat="solicitud in usuari.solicituds" ng-click="reclutam(solicitud)">La tripulacio <b>{{solicitud.nom}}</b> et vol</button>
+                    <button class="btn btn-default" ng-repeat="solicitud in usuari.solicituds" ng-click="borram(solicitud)">Denega</button>
+                </div>
+                <fieldset ng-if="usuari.username == currentUser.username">
+                    <div class="input-control file" style="margin:10px;">
+
+                        <a ng-click="canviaImg()" href="/#/usuari">
+                            <img class="img-thumbnail" ng-src="{{usuari.perfil}}" width="80px" height="80px" />
+                        </a>
+                        <span style="margin-left:20px;font-weight:bold;">{{usuari.username}}</span>
+
+                        <input id="file1" type="file" nv-file-select uploader="uploader" style="display:none;" accept="image/*" capture="camera" />
+                    </div>
+                    <div ng-repeat="item in uploader.queue">
+                        <button class="btn btn-success" ng-click="item.upload()">Guarda!</button>
+                    </div>
+                </fieldset>
+                <div style="margin:10px;">
+                    <p ng-if="usuari.username != currentUser.username"><span><img class="img-thumbnail" ng-src="{{usuari.perfil}}" width="80px" height="80px"/></span><span style="margin-left:20px;font-weight:bold;">{{usuari.username}}</span>
+                        <p><span><img ng-src="images/monedamin.png" width="30px" height="30px" /></span><span style="margin-left:20px;font-weight:bold;">{{usuari.puntuacio}} $</span>
+                        </p>
+                </div>
+
+            </div>
+        </div>
+        <div class="part"></div>
+        <div class="part part-visibleUser">
+            <div class="caixaUser">
+                <h1 style="color:black;">Tresors <img src="images/treasure.png"/ width="30px" height="30px"></h1>
+                <table class="table table-condensed" ng-if="usuari.tresors.length > 0">
+                    <tr class="info">
+                        <td><b>Descripcio</b>
+                        </td>
+                        <td><b>Dia de trobada</b>
+                        </td>
+                    </tr>
+                    <tr class="active" ng-repeat="tresor in usuari.tresors">
+                        <td>{{tresor.descripcio}}</td>
+                        <td>{{tresor.date}}</td>
+                    </tr>
+                </table>
+
+                <p ng-if="usuari.tresors.length == 0">Aquest pirata no te tresors encara... Arrr!</p>
+            </div>
+
+        </div>
+    </div>
+
+
+
+
+
+</div>

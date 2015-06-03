@@ -1,0 +1,34 @@
+<div class="container">
+    <div class="caixa" style="flex">
+        <div class="part part-visible">
+            <div class="caixaUser">
+                <p>Com un gran pirata va dir: <strong>"Arrasa con lo que veas y generoso no seas!"</strong>, Grans pirates deixen anar grans tresors, ets capaç de trobar-los tots?</p>
+                <p>Conectat amb els teus llops de mar per descobrir els secrets que amaga el teu mapa</p>
+
+                <strong>Si no hay supervivientes, ¿Quien cuenta las historias? (Jack Sparreg)</strong>
+                <p ng-if="!mobile" style="margin-top:20px;"><img src="images/pirata.png" width="30" height="30"/>Nomes pots entrar desde un d'aquells aparells moderns que feu servir per parlar..</p>
+                <div ng-if="mobile" style="margin-top:20px;">
+                    <a ng-if="currentUser" class="btn btn-success" href="/#/Mapa">Accedeix al Mapa!</a>
+                    <a ng-if="!currentUser" class="btn btn-success" href="/#/login">Accedeix al Mapa!</a>
+                </div>
+            </div>
+        </div>
+        <div class="part part-visible">
+            <h3 style="color:white;">Rank de tripulacions</h3>
+            <ul class="list-group" ng-repeat="tripulacio in tripulacions">
+                <li class="list-group-item"><span><b>{{tripulacio.nom}}</b></span>: <span>{{tripulacio.puntuacio}}</span><span> <img src="images/treasure.png" width="30" height="30"/></span>
+                </li>
+            </ul>
+            
+        </div>
+        <div class="part part-visible">
+            <h3 style="color:white;">Rank de jugadors</h3>
+            <ul class="list-group" ng-repeat="user in users">
+                <li ng-if="currentUser.username == user.username" class="list-group-item"><span><span><b>{{user.username}}</b></span></span>: <span>{{user.puntuacio}}</span><span> <img src="images/monedamin.png"/></span>
+                </li>
+                <li ng-if="currentUser.username != user.username" class="list-group-item"><span><b><a href="/#/usuari" ng-click="infoUser(user.username)">{{user.username}}</a></b></span>: <span>{{user.puntuacio}}</span><span> <img src="images/monedamin.png"/></span>
+                </li>
+            </ul>
+        </div>
+    </div>
+</div>

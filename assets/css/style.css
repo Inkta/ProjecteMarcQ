@@ -1,0 +1,127 @@
+body {
+    background-color: #CFFFD3;
+    /*background-image:url('../images/fondo2.jpg');
+    background-repeat: no-repeat;
+    background-position: left; */
+}
+.caixa {
+    display: flex;
+    flex-flow: row;
+    justify-content: center;
+}
+.part {
+    width: 100%;
+    text-align: center;
+    justify-content: space-around;
+    margin: 30px;
+    padding: 10px;
+}
+@media all and (max-width: 1000px) {
+    .caixa {
+        display: flex;
+        flex-flow: column;
+        justify-content: center;
+    }
+    .part {
+        width: 100%;
+        text-align: center;
+        justify-content: space-around;
+        margin: auto;
+        padding: 10px;
+    }
+}
+.part-visible {
+    background-color: #52965D;
+    border: 2px solid green;
+    border-radius: 10px;
+}
+.caixaUser {
+    padding: 20px;
+    /*background-image:url('../images/gallina.png');*/
+    background-color: white;
+    border: 5px solid green;
+    border-radius: 10px;
+}
+#afegeixtresor,
+#tresorafegit {
+    border-radius: 5px;
+    padding: 20px;
+    color: black;
+    background-color: white;
+    position: absolute;
+    top: 100px;
+    width: 200px;
+    margin: 0 auto;
+}
+#tresorCreat {
+    color: black;
+    position: absolute;
+    margin: auto;
+    top: 100px;
+    width: 50%;
+    height: 100px;
+    z-index: 1;
+}
+#capturatresor {
+    border-radius: 5px;
+    padding: 20px;
+    background-color: white;
+    border: 1px solid green;
+    color: black;
+    position: absolute;
+    top: 100px;
+    width: 200px;
+    margin: 0 auto;
+}
+#afegeixtresor h3 {
+    color: black;
+}
+butons li {
+    margin: auto;
+}
+.selectdos {
+    padding: 10px;
+    margin: auto;
+}
+#select2 {
+    margin: auto;
+    display: block;
+    float: right;
+    width: 200px;
+}
+.loginform {
+    border: 1px solid green;
+    border-radius: 5px;
+    background-color: white;
+    padding: 20px;
+}
+
+.logoImg {
+    position:absolute;
+    top:0px;
+    left:0px;
+}
+
+.inputWrapper {
+    height: 32px;
+    width: 64px;
+    overflow: hidden;
+    position: relative;
+    cursor: pointer;
+    /*Using a background color, but you can use a background image to represent a button*/
+    background-color: #DDF;
+}
+.fileInput {
+    cursor: pointer;
+    height: 100%;
+    position:absolute;
+    top: 0;
+    right: 0;
+    z-index: 99;
+    /*This makes the button huge. If you want a bigger button, increase the font size*/
+    font-size:50px;
+    /*Opacity settings for all browsers*/
+    opacity: 0;
+    -moz-opacity: 0;
+    filter:progid:DXImageTransform.Microsoft.Alpha(opacity=0)
+}
