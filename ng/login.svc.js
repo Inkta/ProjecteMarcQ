@@ -3,8 +3,10 @@
       var srv = this;
       srv.auth = false;
       var usuari;
+      var xauth;
 
       srv.cookie = function(token) {
+        xauth = token;
         $http.defaults.headers.common['x-auth'] = token;
         return $http.get('/api/users/user').success(function(user) {
           srv.auth = true;
@@ -22,12 +24,16 @@
       srv.getUsuari = function() {
         return usuari;
       };
+      srv.getAuth = function() {
+        return xauth;
+      }
 
       srv.login = function(username, password, noLogin) {
         return $http.post('/api/users/session', {
           username: username,
           password: password
         }).success(function(data, status) {
+          xauth = data;
           $http.defaults.headers.common['x-auth'] = data;
           if (data) {
             srv.auth = true;

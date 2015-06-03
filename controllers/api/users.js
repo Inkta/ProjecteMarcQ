@@ -8,24 +8,24 @@ var compressor = path.resolve(__dirname, '../../compressor.js');
 //--------compresor
 
 
-function compressAndResize (imageUrl) {
-    
-  // Creem un "child process" d'aquesta manera no 
-  // fem un bloqueig del EventLoop amb un ús intens de la CPU
-  // al processar les imatges
-  var childProcess = require('child_process').fork(compressor);
-  
-  
-  childProcess.on('message', function(message) {
-    console.log(message);
-  });
-  childProcess.on('error', function(error) {   // Si el procés rep un missatge l'escriurà a la consola
-    console.error(error.stack);
-  });
-  childProcess.on('exit', function() {  //Quan el procés rep l'event exit mostra un missatge a la consola
-    console.log('process exited');
-  });
-  childProcess.send(imageUrl);
+function compressAndResize(imageUrl) {
+
+    // Creem un "child process" d'aquesta manera no 
+    // fem un bloqueig del EventLoop amb un ús intens de la CPU
+    // al processar les imatges
+    var childProcess = require('child_process').fork(compressor);
+
+
+    childProcess.on('message', function(message) {
+        console.log(message);
+    });
+    childProcess.on('error', function(error) { // Si el procés rep un missatge l'escriurà a la consola
+        console.error(error.stack);
+    });
+    childProcess.on('exit', function() { //Quan el procés rep l'event exit mostra un missatge a la consola
+        console.log('process exited');
+    });
+    childProcess.send(imageUrl);
 }
 
 
@@ -103,6 +103,12 @@ router.post('/user', function(req, res, next) {
     });
 });
 
+
+
+
+//--------> Part per usuaris de l'aplicacio com a jugadors Amb autentificacio
+
+
 router.post('/pujarimatge', function(req, res, next) {
     if (req.auth) {
         User.findByIdAndUpdate(req.body.usuari, {
@@ -111,49 +117,107 @@ router.post('/pujarimatge', function(req, res, next) {
             if (err) {
                 return next(err);
             }
-            compressAndResize(__dirname+"/../../assets/perfils/" + req.files.imatge.name);
+            compressAndResize(__dirname + "/../../assets/perfils/" + req.files.imatge.name);
             res.status(200).json(user);
         });
-    } else {
-        res.status(403).json({'error': 'error auth'});
     }
-    
+    else {
+        res.status(403).json({
+            'error': 'error auth'
+        });
+    }
+
 });
-
-
-//--------> Part per usuaris de l'aplicacio com a jugadors
 
 router.put("/tripulacio/:id", function(req, res, next) {
-    User.findByIdAndUpdate(req.params.id, {
-        "tripulacio": req.body.tripulacio
-    }, function(err, user) {
-        if (err) {
-            return next(err);
-        }
-        res.status(200).json(user);
-    });
-});
-
-router.put("/aceptasol/:id", function(req, res, next) {
-
-    User.findById(req.params.id)
-        .exec(function(err, user) {
+    if (req.auth) {
+        User.findByIdAndUpdate(req.params.id, {
+            "tripulacio": req.body.tripulacio
+        }, function(err, user) {
             if (err) {
                 return next(err);
             }
-            user.solicituds.splice(user.solicituds.indexOf(req.body.solicitud), 1);
-            if (req.body.missatge == "reclutam") {
-                User.findByIdAndUpdate(req.params.id, {
-                    "solicituds": user.solicituds,
-                    "tripulacio": req.body.solicitud._id
-                }, function(err, user) {
-                    if (err) {
-                        return next(err);
-                    }
-                    res.status(200).json(user);
-                });
-            }
-            else if (req.body.missatge == "denega") {
+            res.status(200).json(user);
+        });
+    }
+    else {
+        res.status(403).json({
+            'error': 'error auth'
+        });
+    }
+});
+
+router.put("/aceptasol/:id", function(req, res, next) {
+    if (req.auth) {
+        User.findById(req.params.id)
+            .exec(function(err, user) {
+                if (err) {
+                    return next(err);
+                }
+                user.solicituds.splice(user.solicituds.indexOf(req.body.solicitud), 1);
+                if (req.body.missatge == "reclutam") {
+                    User.findByIdAndUpdate(req.params.id, {
+                        "solicituds": user.solicituds,
+                        "tripulacio": req.body.solicitud._id
+                    }, function(err, user) {
+                        if (err) {
+                            return next(err);
+                        }
+                        res.status(200).json(user);
+                    });
+                }
+                else if (req.body.missatge == "denega") {
+                    User.findByIdAndUpdate(req.params.id, {
+                        "solicituds": user.solicituds
+                    }, function(err, user) {
+                        if (err) {
+                            return next(err);
+                        }
+                        res.status(200).json(user);
+                    });
+                }
+
+            });
+    }
+    else {
+        res.status(403).json({
+            'error': 'error auth'
+        });
+    }
+});
+
+router.put("/:id", function(req, res, next) {
+    if (req.auth) {
+        User.findById(req.params.id, function(err, user) {
+            if (err) return next(err);
+            user.tresors.push(req.body.tresor['_id']);
+            User.findByIdAndUpdate(req.params.id, {
+                "puntuacio": (user.puntuacio + 10),
+                "tresors": user.tresors
+            }).populate('tripulacio').exec(function(err, user) {
+                if (err) {
+                    return next(err);
+                }
+                res.status(200).json(user);
+            });
+        });
+    }
+    else {
+        res.status(403).json({
+            'error': 'error auth'
+        });
+    }
+});
+
+
+router.put("/solicituds/:id", function(req, res, next) {
+    if (req.auth) {
+        User.findById(req.params.id)
+            .exec(function(err, user) {
+                if (err) {
+                    return next(err);
+                }
+                user.solicituds.push(req.body.solicituds['_id']);
                 User.findByIdAndUpdate(req.params.id, {
                     "solicituds": user.solicituds
                 }, function(err, user) {
@@ -162,49 +226,18 @@ router.put("/aceptasol/:id", function(req, res, next) {
                     }
                     res.status(200).json(user);
                 });
-            }
 
-        });
-});
-
-router.put("/:id", function(req, res, next) {
-    User.findById(req.params.id, function(err, user) {
-        if (err) return next(err);
-        user.tresors.push(req.body.tresor['_id']);
-        User.findByIdAndUpdate(req.params.id, {
-            "puntuacio": (user.puntuacio + 10),
-            "tresors": user.tresors
-        }).populate('tripulacio').exec(function(err, user) {
-            if (err) {
-                return next(err);
-            }
-            res.status(200).json(user);
-        });
-    });
-});
-
-
-router.put("/solicituds/:id", function(req, res, next) {
-    User.findById(req.params.id)
-        .exec(function(err, user) {
-            if (err) {
-                return next(err);
-            }
-            user.solicituds.push(req.body.solicituds['_id']);
-            User.findByIdAndUpdate(req.params.id, {
-                "solicituds": user.solicituds
-            }, function(err, user) {
-                if (err) {
-                    return next(err);
-                }
-                res.status(200).json(user);
             });
-
+    }
+    else {
+        res.status(403).json({
+            'error': 'error auth'
         });
+    }
 });
 
 
-
+//Part del servidor sense necesitat de Autentificacio
 
 router.get('/cerca', function(req, res, next) {
     User.find({

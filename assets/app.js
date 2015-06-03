@@ -78,8 +78,10 @@ angular.module('app')
       var srv = this;
       srv.auth = false;
       var usuari;
+      var xauth;
 
       srv.cookie = function(token) {
+        xauth = token;
         $http.defaults.headers.common['x-auth'] = token;
         return $http.get('/api/users/user').success(function(user) {
           srv.auth = true;
@@ -97,12 +99,16 @@ angular.module('app')
       srv.getUsuari = function() {
         return usuari;
       };
+      srv.getAuth = function() {
+        return xauth;
+      }
 
       srv.login = function(username, password, noLogin) {
         return $http.post('/api/users/session', {
           username: username,
           password: password
         }).success(function(data, status) {
+          xauth = data;
           $http.defaults.headers.common['x-auth'] = data;
           if (data) {
             srv.auth = true;
@@ -330,14 +336,12 @@ angular.module('app')
     });
 angular.module('app')
     .controller('tripController', function($scope, $location, UsersServei, $route, TripServei) {
-        console.log($scope.currentUser);
 
         function getUser() {
             UsersServei.srv.busca({
                 id: $scope.currentUser.username
             }, function(users) {
                 $scope.usuari = users[0];
-                console.log($scope.usuari);
                 if ($scope.usuari.tripulacio != null) {
                     TripServei.srv.busca({
                         id: $scope.usuari.tripulacio._id
@@ -361,7 +365,6 @@ angular.module('app')
                     puntuacio: $scope.usuari.puntuacio / 10,
                     membres: [$scope.usuari._id]
                 }, function(trip) {
-                    console.log(trip);
                     UsersServei.trip.update({
                             id: $scope.usuari._id
                         }, {
@@ -380,8 +383,6 @@ angular.module('app')
             UsersServei.busca.cerca({
                 nom: mariner
             }, function(user) {
-                console.log(user);
-                console.log(user.solicituds.indexOf($scope.usuari.tripulacio));
                 if (user.username == null) {
                     $scope.solerror = "No existeix aquest mariner!";
                 }
@@ -401,7 +402,7 @@ angular.module('app')
                         user: user,
                         solicituds: $scope.usuari.tripulacio
                     }, function(user) {
-                        console.log(user);
+                        $route.reload();
                     });
                 }
             });
@@ -428,7 +429,7 @@ angular.module('app')
       return this;
     });
 angular.module('app')
-  .controller('UsersController', function($scope, $location, UsersServei, $route, TripServei, FileUploader) {
+  .controller('UsersController', function($scope, $location,LoginServei, UsersServei, $route, TripServei, FileUploader) {
 
     var uploader = $scope.uploader = new FileUploader({
       url: "/api/users/pujarimatge",
@@ -438,6 +439,10 @@ angular.module('app')
 
 
     uploader.onBeforeUploadItem = function(item) {
+      
+      item.headers = {
+        'x-auth': LoginServei.getAuth()
+      };
       item.formData.push({
         usuari: $scope.usuari._id
       });

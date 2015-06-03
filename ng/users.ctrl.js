@@ -1,5 +1,5 @@
 angular.module('app')
-  .controller('UsersController', function($scope, $location, UsersServei, $route, TripServei, FileUploader) {
+  .controller('UsersController', function($scope, $location,LoginServei, UsersServei, $route, TripServei, FileUploader) {
 
     var uploader = $scope.uploader = new FileUploader({
       url: "/api/users/pujarimatge",
@@ -9,6 +9,10 @@ angular.module('app')
 
 
     uploader.onBeforeUploadItem = function(item) {
+      
+      item.headers = {
+        'x-auth': LoginServei.getAuth()
+      };
       item.formData.push({
         usuari: $scope.usuari._id
       });
